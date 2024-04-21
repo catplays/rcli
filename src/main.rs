@@ -1,4 +1,5 @@
 use clap::Parser;
+use tracing_subscriber::fmt::format;
 use rcli::{Opts, process_csv, SubCommand};
 
 
@@ -7,7 +8,12 @@ fn main() -> anyhow::Result<()> {
     println!("{:?}", opt);
     match opt.cmd {
         SubCommand::Csv(opt) => {
-            process_csv(&opt.input, &opt.output)?
+            let output: String = if let Some(output) = opt.output {
+                output.clone()
+            } else {
+                format!("output.{}", opt.format)
+            };
+            process_csv(&opt.input, output, opt.format)?
         }
     }
     Ok(())
