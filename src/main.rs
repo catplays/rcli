@@ -1,6 +1,5 @@
 use clap::Parser;
-use tracing_subscriber::fmt::format;
-use rcli::{Opts, process_csv, SubCommand};
+use rcli::{Opts, SubCommand,process_csv,process_genpass};
 
 
 fn main() -> anyhow::Result<()> {
@@ -14,6 +13,15 @@ fn main() -> anyhow::Result<()> {
                 format!("output.{}", opt.format)
             };
             process_csv(&opt.input, output, opt.format)?
+        }
+        SubCommand::GenPass(opts) => {
+            process_genpass(
+                opts.length,
+                opts.uppercase,
+                opts.lowercase,
+                opts.number,
+                opts.symbol,
+            )?;
         }
     }
     Ok(())

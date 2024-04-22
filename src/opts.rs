@@ -1,6 +1,8 @@
 use std::fmt;
 use std::str::FromStr;
 use clap::Parser;
+use genpass::GenPassOpts;
+use crate::genpass;
 
 #[derive(Debug, Parser)]
 #[command(name = "rcli", version, author, about, long_about = None)]
@@ -13,6 +15,8 @@ pub struct Opts {
 pub enum SubCommand {
     #[command(name = "csv", about = "show csv, or convert to other format")]
     Csv(CsvOpts),
+    #[command(name = "genpass", about="Generate a random password")]
+    GenPass(GenPassOpts)
 }
 
 #[derive(Debug, Clone, Copy)]
