@@ -2,6 +2,7 @@ use std::fmt;
 use std::str::FromStr;
 use clap::Parser;
 use crate::GenPassOpts;
+use crate::Base64SubCommand;
 
 #[derive(Debug, Parser)]
 #[command(name = "rcli", version, author, about, long_about = None)]
@@ -15,7 +16,9 @@ pub enum SubCommand {
     #[command(name = "csv", about = "show csv, or convert to other format")]
     Csv(CsvOpts),
     #[command(name = "genpass", about="Generate a random password")]
-    GenPass(GenPassOpts)
+    GenPass(GenPassOpts),
+    #[command(subcommand)]
+    Base64(Base64SubCommand)
 }
 
 #[derive(Debug, Clone, Copy)]

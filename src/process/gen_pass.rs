@@ -46,6 +46,7 @@ pub fn process_genpass(
     println!("{}", pass_str);
     // 密码的强度
     let estimate = zxcvbn(pass_str.as_str(), &[]).unwrap();
-    println!("level: {}", estimate.score()); // 3
+    // 使用eprintln打印不会输出到标准输出中
+    eprintln!("level: {}", estimate.score()); // 3
     Ok(())
 }
