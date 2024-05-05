@@ -1,5 +1,5 @@
 use rand::seq::SliceRandom;
-
+use zxcvbn::zxcvbn;
 
 const UPPER: &[u8] = b"ABCDEFGHJKLMNPQRSTUVWXYZ";
 const LOWER: &[u8] = b"abcdefghijkmnopqrstuvwxyz";
@@ -42,6 +42,10 @@ pub fn process_genpass(
         password.push(*c)
     }
     password.shuffle(&mut rng);
-    println!("{}", String::from_utf8(password)?);
+    let pass_str = String::from_utf8(password)?;
+    println!("{}", pass_str);
+    // 密码的强度
+    let estimate = zxcvbn(pass_str.as_str(), &[]).unwrap();
+    println!("level: {}", estimate.score()); // 3
     Ok(())
 }

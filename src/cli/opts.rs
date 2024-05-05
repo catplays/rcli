@@ -1,8 +1,7 @@
 use std::fmt;
 use std::str::FromStr;
 use clap::Parser;
-use genpass::GenPassOpts;
-use crate::genpass;
+use crate::GenPassOpts;
 
 #[derive(Debug, Parser)]
 #[command(name = "rcli", version, author, about, long_about = None)]
