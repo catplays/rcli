@@ -3,6 +3,7 @@ use std::str::FromStr;
 use clap::Parser;
 use crate::GenPassOpts;
 use crate::Base64SubCommand;
+use crate::cli::TextSubCommand;
 
 #[derive(Debug, Parser)]
 #[command(name = "rcli", version, author, about, long_about = None)]
@@ -15,10 +16,13 @@ pub struct Opts {
 pub enum SubCommand {
     #[command(name = "csv", about = "show csv, or convert to other format")]
     Csv(CsvOpts),
-    #[command(name = "genpass", about="Generate a random password")]
+    #[command(name = "genpass", about = "Generate a random password")]
     GenPass(GenPassOpts),
     #[command(subcommand)]
-    Base64(Base64SubCommand)
+    Base64(Base64SubCommand),
+
+    #[command(subcommand)]
+    Signature(TextSubCommand),
 }
 
 #[derive(Debug, Clone, Copy)]
