@@ -41,7 +41,7 @@ pub struct KeyGenerateOpts {
     #[arg(long, default_value = "blake3", value_parser = parse_text_sign_format)]
     pub format: TextSignFormat,
     #[arg(short, long, value_parser = verify_path)]
-    pub output_path: PathBuf,
+    pub output: PathBuf,
 }
 
 #[derive(Debug, Clone, Copy)]

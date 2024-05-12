@@ -12,7 +12,7 @@ pub fn process_genpass(
     lower: bool,
     number: bool,
     symbol: bool,
-) -> anyhow::Result<()> {
+) -> anyhow::Result<String> {
     // 随机数种子
     let mut  rng = rand::thread_rng();
     let mut password = Vec::new();
@@ -43,10 +43,10 @@ pub fn process_genpass(
     }
     password.shuffle(&mut rng);
     let pass_str = String::from_utf8(password)?;
-    println!("{}", pass_str);
+
     // 密码的强度
     let estimate = zxcvbn(pass_str.as_str(), &[]).unwrap();
     // 使用eprintln打印不会输出到标准输出中
     eprintln!("level: {}", estimate.score()); // 3
-    Ok(())
+    Ok(pass_str)
 }

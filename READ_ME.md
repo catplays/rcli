@@ -22,3 +22,8 @@ cargo run -- signature sign -k fixtures/blake3.txt
 输入数据后： ctrl+D
 
 cargo run -- signature verify --key fixtures/blake3.txt --sig 粘贴数据
+
+## generate
+
+cargo run -- signature generate -o fixtures --format ed25519
+
