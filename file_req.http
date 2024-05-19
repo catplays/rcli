@@ -1,0 +1,11 @@
+### http file test
+
+GET 127.0.0.1:8080/tower/b64.txt
+Accept: application/json
+
+###
+GET 127.0.0.1:8080/v1/b64.txt
+Accept: application/json
+
+###
+GET 127.0.0.1:8080/v1/
