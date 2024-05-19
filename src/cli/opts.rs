@@ -1,7 +1,7 @@
 use std::fmt;
 use std::str::FromStr;
 use clap::Parser;
-use crate::GenPassOpts;
+use crate::{GenPassOpts, HttpSubCommand};
 use crate::Base64SubCommand;
 use crate::cli::TextSubCommand;
 
@@ -23,6 +23,8 @@ pub enum SubCommand {
 
     #[command(subcommand)]
     Signature(TextSubCommand),
+    #[command(subcommand)]
+    Http(HttpSubCommand),
 }
 
 #[derive(Debug, Clone, Copy)]

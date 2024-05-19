@@ -1,13 +1,11 @@
 use std::fs;
 use clap::Parser;
 
-use rcli::{Base64SubCommand, Opts, process_csv,
-           process_decode, process_encode,
-           process_genpass, process_text_sign,
-           process_text_verify, process_text_generate,
-           SubCommand, TextSubCommand, };
+use rcli::{Base64SubCommand, Opts, process_csv, process_decode, process_encode, process_genpass, process_text_sign, process_text_verify, process_text_generate, SubCommand, TextSubCommand, HttpSubCommand, process_http_serve};
 
-fn main() -> anyhow::Result<()> {
+#[tokio::main]
+async fn main() -> anyhow::Result<()> {
+    tracing_subscriber::fmt::init();// 全链路追踪库，打印日志
     let opt = Opts::parse();
     match opt.cmd {
         SubCommand::Csv(opt) => {
@@ -40,7 +38,7 @@ fn main() -> anyhow::Result<()> {
                     }
                 }
         }
-        SubCommand::Signature(subcmd) => match subcmd {
+        SubCommand::Signature(sub_cmd) => match sub_cmd {
             TextSubCommand::Sign(opts) => {
                 let sig = process_text_sign(&opts.input, &opts.key, opts.format)?;
                 println!("{}", sig);
@@ -64,6 +62,12 @@ fn main() -> anyhow::Result<()> {
                 }
             }
         },
+        SubCommand::Http(cmd) => match cmd {
+            HttpSubCommand::Serve(opt) => {
+                println!("dir:{:?}, and port:{}", opt.dir, opt.port);
+                process_http_serve(opt.dir, opt.port).await?
+            }
+        }
     }
     Ok(())
 }

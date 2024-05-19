@@ -1,13 +1,19 @@
 mod genpass;
 mod opts;
 mod base64;
-mod signtrue;
+mod signature;
+mod http;
 
 use std::path::{Path, PathBuf};
-pub use opts::{Opts, SubCommand, OutputFormat};
-pub use genpass::{GenPassOpts};
-pub use base64::{Base64Format,Base64SubCommand};
-pub use signtrue::{TextSignFormat, TextSubCommand};
+
+
+pub use self:: {
+    opts::{Opts, SubCommand, OutputFormat},
+    base64::{Base64Format,Base64SubCommand},
+    genpass::{GenPassOpts},
+    signature::{TextSignFormat, TextSubCommand},
+    http::{HttpSubCommand, HttpServeOpt}
+};
 
 fn verify_file(filename: &str) -> Result<String, &'static str> {
     // if input is "-" or file exists

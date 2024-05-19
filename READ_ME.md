@@ -24,6 +24,8 @@ cargo run -- signature sign -k fixtures/blake3.txt
 cargo run -- signature verify --key fixtures/blake3.txt --sig 粘贴数据
 
 ## generate
-
 cargo run -- signature generate -o fixtures --format ed25519
 
+
+# http
+cargo run -- http serve -d fixtures -p 8080 
