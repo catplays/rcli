@@ -2,6 +2,7 @@ use std::{fmt, str::FromStr};
 use std::fmt::{Formatter};
 
 use clap::Parser;
+use crate::{CmdExecutor, process_decode, process_encode};
 use super::verify_file;
 
 #[derive(Debug, Parser)]
@@ -52,10 +53,9 @@ impl FromStr for Base64Format {
 
 impl From<Base64Format> for &'static str {
     fn from(value: Base64Format) -> Self {
-        match value{
+        match value {
             Base64Format::Standard => "standard",
             Base64Format::UrlSafe => "urlsafe",
-
         }
     }
 }
@@ -64,5 +64,34 @@ impl From<Base64Format> for &'static str {
 impl fmt::Display for Base64Format {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         write!(f, "{}", Into::<&str>::into(*self))
+    }
+}
+
+impl CmdExecutor for Base64SubCommand {
+    async fn execute(self) -> anyhow::Result<()> {
+        match self {
+            Base64SubCommand::Encode(opt) => {
+                opt.execute().await
+            }
+            Base64SubCommand::Decode(opt) => {
+                opt.execute().await
+            }
+        }
+    }
+}
+
+impl CmdExecutor for Base64EncodeOpts {
+    async fn execute(self) -> anyhow::Result<()> {
+        let encoded = process_encode(&self.input, self.format)?;
+        println!("{}", encoded);
+        Ok(())
+    }
+}
+
+impl CmdExecutor for Base64DecodeOpts {
+    async fn execute(self) -> anyhow::Result<()> {
+        let decoded = process_decode(&self.input, self.format)?;
+        println!("{}", decoded);
+        Ok(())
     }
 }

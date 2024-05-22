@@ -1,6 +1,7 @@
-use std::{fmt, path::PathBuf, str::FromStr};
+use std::{fmt, fs, path::PathBuf, str::FromStr};
 
 use clap::Parser;
+use crate::{CmdExecutor, process_text_generate, process_text_sign, process_text_verify};
 
 use super::{verify_file, verify_path};
 
@@ -13,6 +14,7 @@ pub enum TextSubCommand {
     #[command(about = "Generate a random blake3 key or ed25519 key pair")]
     Generate(KeyGenerateOpts),
 }
+
 
 #[derive(Debug, Parser)]
 pub struct TextSignOpts {
@@ -42,6 +44,51 @@ pub struct KeyGenerateOpts {
     pub format: TextSignFormat,
     #[arg(short, long, value_parser = verify_path)]
     pub output: PathBuf,
+}
+
+
+impl CmdExecutor for TextSubCommand {
+    async fn execute(self) -> anyhow::Result<()> {
+        match self {
+            TextSubCommand::Sign(opts) => opts.execute().await,
+            TextSubCommand::Verify(opts) => opts.execute().await,
+            TextSubCommand::Generate(opts) => opts.execute().await,
+        }
+    }
+}
+
+impl CmdExecutor for TextSignOpts {
+    async fn execute(self) -> anyhow::Result<()> {
+        let sig = process_text_sign(&self.input, &self.key, self.format)?;
+        println!("{}", sig);
+        Ok(())
+    }
+}
+
+impl CmdExecutor for TextVerifyOpts {
+    async fn execute(self) -> anyhow::Result<()> {
+        let verified = process_text_verify(&self.input, &self.key, self.format, &self.sig)?;
+        println!("{}", verified);
+        Ok(())
+    }
+}
+
+impl CmdExecutor for KeyGenerateOpts {
+    async fn execute(self) -> anyhow::Result<()> {
+        let key = process_text_generate(self.format)?;
+        match self.format {
+            crate::TextSignFormat::Blake3 => {
+                let name = self.output.join("blake3.txt");
+                fs::write(name, &key[0])?;
+            }
+            crate::TextSignFormat::Ed25519 => {
+                let name = &self.output;
+                fs::write(name.join("ed25519.sk"), &key[0])?;
+                fs::write(name.join("ed25519.pk"), &key[1])?;
+            }
+        }
+        Ok(())
+    }
 }
 
 #[derive(Debug, Clone, Copy)]

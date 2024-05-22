@@ -3,16 +3,18 @@ mod opts;
 mod base64;
 mod signature;
 mod http;
+mod csv;
 
 use std::path::{Path, PathBuf};
 
 
 pub use self:: {
-    opts::{Opts, SubCommand, OutputFormat},
+    opts::{Opts, SubCommand, },
     base64::{Base64Format,Base64SubCommand},
     genpass::{GenPassOpts},
     signature::{TextSignFormat, TextSubCommand},
-    http::{HttpSubCommand, HttpServeOpt}
+    http::{HttpSubCommand},
+    csv::{OutputFormat}
 };
 
 fn verify_file(filename: &str) -> Result<String, &'static str> {

@@ -1,11 +1,11 @@
 use std::net::SocketAddr;
 use std::path::{PathBuf};
 use std::sync::Arc;
-use axum::{extract::{Path, State}, http::StatusCode, Json};
+use axum::{extract::{Path, State}, http::StatusCode};
 use axum::body::Body;
 use axum::response::Response;
 use axum::Router;
-use axum::routing::{get, get_service};
+use axum::routing::{get};
 use tower_http::services::ServeDir;
 use tracing::{info, warn};
 
