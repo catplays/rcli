@@ -1,7 +1,8 @@
 
 use clap::Parser;
 
-use rcli::{Opts, CmdExecutor};
+use rcli::{Opts};
+use rcli::CmdExecutor;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {

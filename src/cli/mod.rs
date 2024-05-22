@@ -9,12 +9,12 @@ use std::path::{Path, PathBuf};
 
 
 pub use self:: {
-    opts::{Opts, SubCommand, },
-    base64::{Base64Format,Base64SubCommand},
-    genpass::{GenPassOpts},
-    signature::{TextSignFormat, TextSubCommand},
-    http::{HttpSubCommand},
-    csv::{OutputFormat}
+    opts::*,
+    base64::*,
+    csv::*,
+    genpass::*,
+    http::*,
+    signature::*
 };
 
 fn verify_file(filename: &str) -> Result<String, &'static str> {

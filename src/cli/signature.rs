@@ -1,11 +1,13 @@
 use std::{fmt, fs, path::PathBuf, str::FromStr};
 
 use clap::Parser;
+use enum_dispatch::enum_dispatch;
 use crate::{CmdExecutor, process_text_generate, process_text_sign, process_text_verify};
 
 use super::{verify_file, verify_path};
 
 #[derive(Debug, Parser)]
+#[enum_dispatch(CmdExecutor)]
 pub enum TextSubCommand {
     #[command(about = "Sign a text with a private/session key and return a signature")]
     Sign(TextSignOpts),
@@ -47,15 +49,6 @@ pub struct KeyGenerateOpts {
 }
 
 
-impl CmdExecutor for TextSubCommand {
-    async fn execute(self) -> anyhow::Result<()> {
-        match self {
-            TextSubCommand::Sign(opts) => opts.execute().await,
-            TextSubCommand::Verify(opts) => opts.execute().await,
-            TextSubCommand::Generate(opts) => opts.execute().await,
-        }
-    }
-}
 
 impl CmdExecutor for TextSignOpts {
     async fn execute(self) -> anyhow::Result<()> {
@@ -77,11 +70,11 @@ impl CmdExecutor for KeyGenerateOpts {
     async fn execute(self) -> anyhow::Result<()> {
         let key = process_text_generate(self.format)?;
         match self.format {
-            crate::TextSignFormat::Blake3 => {
+            TextSignFormat::Blake3 => {
                 let name = self.output.join("blake3.txt");
                 fs::write(name, &key[0])?;
             }
-            crate::TextSignFormat::Ed25519 => {
+            TextSignFormat::Ed25519 => {
                 let name = &self.output;
                 fs::write(name.join("ed25519.sk"), &key[0])?;
                 fs::write(name.join("ed25519.pk"), &key[1])?;
